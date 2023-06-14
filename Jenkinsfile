@@ -16,6 +16,7 @@
 
                git credentialsId: 'github_auth',
                url: 'https://github.com/icicibank-org-nov/mrdevops_java_app.git'
+               branch: 'main'
             }
         }
 
@@ -47,7 +48,7 @@
 
             steps{
                 
-                withSonarQubeEnv(credentialsId: 'Jenkins_slack_auth') {
+                withSonarQubeEnv(credentialsId: 'sonar_auth') {
                     
                  sh "mvn clean package sonar:sonar"
                 }
@@ -59,8 +60,7 @@
 
             steps{
 
-                waitForQualityGate abortPipeline: false, credentialsId: 'Jenkins_slack_auth'
-
+                waitForQualityGate abortPipeline: false, credentialsId: 'sonar_auth'
             }
         }
 
@@ -119,7 +119,7 @@
                 script{
 
                     
-                    withCredentials([string(credentialsId: 'docker_authi', variable: 'dockerhub_pwd')]) {
+                    withCredentials([string(credentialsId: 'dockerhub_auth', variable: 'dockerhub_pwd')]) {
                     sh "docker login -u lokeshsdockerhub --password ${dockerhub_pwd}"
                     sh "docker push lokeshsdockerhub/$JOB_NAME:v1.$BUILD_ID"
                     sh "docker push lokeshsdockerhub/$JOB_NAME:latest"
@@ -128,7 +128,7 @@
                     
                 }
             }
-        }*/
+        }
 
     }
- }
+}
