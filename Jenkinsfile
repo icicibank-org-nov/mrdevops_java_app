@@ -14,9 +14,10 @@
 
             steps {
 
-               git credentialsId: 'github_auth',
-               url: 'https://github.com/icicibank-org-nov/mrdevops_java_app.git'
-               branch: 'main'
+            git branch: 'main',
+            credentialsId: 'github_auth',
+            url: 'https://github.com/icicibank-org-nov/mrdevops_java_app.git'
+            
             }
         }
 
