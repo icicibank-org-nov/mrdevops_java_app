@@ -1,9 +1,9 @@
 {
     "jenkins-runner.jobs": {
-        "project -1": {
+        "project": {
             "isDefault": true,
             "runWith": "jenkins-master",
-            "name": "project -1",
+            "name": "project",
         }   
     },
     "jenkins-runner.hostConfigs": {
