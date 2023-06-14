@@ -1,11 +1,8 @@
  pipeline {
 
-    agent {
+    agent any
 
-        docker ''
-    }
     
-    }
 
     tools {
 
