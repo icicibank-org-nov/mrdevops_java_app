@@ -1,6 +1,11 @@
  pipeline {
 
-    agent any
+    agent {
+
+        docker ''
+    }
+    
+    }
 
     tools {
 
