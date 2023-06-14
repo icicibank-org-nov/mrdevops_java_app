@@ -1,4 +1,5 @@
- pipeline {
+@Library('lokisharedlibs') _
+pipeline {
 
     agent any
 
@@ -19,6 +20,7 @@
             git branch: 'main',
             credentialsId: 'github_auth',
             url: 'https://github.com/icicibank-org-nov/mrdevops_java_app.git'
+            sendSlackNotifications('STARTED')
 
             }
         }
@@ -138,6 +140,12 @@
     post {
         always {
             emailext body: 'A Test EMail', recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: '$BUILD_NUMBER:currentBuild.result'
+        }
+        success {
+            sendSlackNotifications(currentBuild.result)
+        }
+        failure {
+            sendSlackNotifications(currentBuild.result)
         }
     }
 
