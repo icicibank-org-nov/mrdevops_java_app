@@ -142,7 +142,7 @@ pipeline {
         
             """
             cd minikube-sample
-            sed -i 's/25/${BUILD_ID}/g' values.yaml
+            sed -i 's/25/${BUILD_NUMBER}/g' values.yaml
             git add .
             git commit -m "update the helmrepo"
             git push origin main 
