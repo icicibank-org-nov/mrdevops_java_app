@@ -137,15 +137,6 @@ pipeline {
 
     }
 
-    stage('Update the image tag') {
-
-        steps{
-
-            sh "sed -i "s/
-        }
-    }
-
-
     post {
         always {
             emailext body: 'A Test EMail', recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: '$BUILD_NUMBER:currentBuild.result'
