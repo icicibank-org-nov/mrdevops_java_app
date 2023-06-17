@@ -141,11 +141,26 @@ pipeline {
             script{
         
             """
-            cd minikube-sample
-            sed -i 's/25/${BUILD_NUMBER}/g' values.yaml
-            git add .
-            git commit -m "update the helmrepo"
-            git push origin main 
+            stage('Update Deployment File') {
+        environment {
+            GIT_REPO_NAME = "icicibank-org-nov"
+            GIT_USER_NAME = "lokeshgithub"
+        }
+        steps {
+            withCredentials([string(credentialsId: 'Jenkins_Github_PWD', variable: 'GITHUB_TOKEN')]) {
+                sh """
+                    git config user.email "lokeshreddy05690@gmail.com"
+                    git config user.name "lokeshgithub"
+                    BUILD_NUMBER=${BUILD_NUMBER}
+                    sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" minikube-sample/deployment.yml
+                    git add minikube-sample/deployment.yml
+                    git commit -m "Update deployment image to version ${BUILD_NUMBER}"
+                    git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
+                """
+            }
+        }
+    }
+
          
             """
             }
