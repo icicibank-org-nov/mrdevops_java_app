@@ -133,7 +133,18 @@ pipeline {
                     
                 }
             }
+       }  
+
     }
+
+    stage('Update the image tag') {
+
+        steps{
+
+            sh "sed -i "s/
+        }
+    }
+
 
     post {
         always {
