@@ -133,26 +133,6 @@ pipeline {
                     
                 }
             }
-        }
-    stage('Update Helm Repo') {
-    steps {
-        script {
-            def helmRepo = 'minikube-sample'  
-            def newImageTag = 'v1.${BUILD_ID}'  
-            def helmCommand = "helm repo update && helm repo list | grep ${helmRepo} | awk '{print \$1}' | xargs -I % helm search repo %/${helmRepo} -o json | jq '.[].name' -r"
-
-            def helmRepoName = sh(script: helmCommand, returnStdout: true).trim()
-
-            sh "helm show values ${helmRepoName} > helm-values.yaml"
-            sh "sed -i 's|tag: .*|tag: ${newImageTag}|' helm-values.yaml"
-            sh "helm upgrade --values helm-values.yaml minikubeapp ${helmRepoName}"
-        }
-    }
-}
-
-
-        
-
     }
 
     post {
