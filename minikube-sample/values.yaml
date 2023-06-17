@@ -8,7 +8,7 @@ image:
   repository: lokeshsdockerhub/project
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "v1.25"
+  tag: "latest"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -37,7 +37,7 @@ securityContext: {}
   # runAsUser: 1000
 
 service:
-  type: NOdePort
+  type: NodePort
   port: 30000
 
 ingress:
