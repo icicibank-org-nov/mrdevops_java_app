@@ -134,39 +134,24 @@ pipeline {
                 }
             }
         }
+    stage('Update Helm Repo') {
+    steps {
+        script {
+            def helmRepo = 'minikube-sample'  
+            def newImageTag = 'v1.${BUILD_ID}'  
+            def helmCommand = "helm repo update && helm repo list | grep ${helmRepo} | awk '{print \$1}' | xargs -I % helm search repo %/${helmRepo} -o json | jq '.[].name' -r"
 
-       stage('Update the image tag in helm repo'){
+            def helmRepoName = sh(script: helmCommand, returnStdout: true).trim()
 
-        steps{
-            script{
-        
-            """
-            stage('Update Deployment File') {
-        environment {
-            GIT_REPO_NAME = "icicibank-org-nov"
-            GIT_USER_NAME = "lokeshgithub"
-        }
-        steps {
-            withCredentials([string(credentialsId: 'Jenkins_Github_PWD', variable: 'GITHUB_TOKEN')]) {
-                sh """
-                    git config user.email "lokeshreddy05690@gmail.com"
-                    git config user.name "lokeshgithub"
-                    BUILD_NUMBER=${BUILD_NUMBER}
-                    sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" minikube-sample/deployment.yml
-                    git add minikube-sample/deployment.yml
-                    git commit -m "Update deployment image to version ${BUILD_NUMBER}"
-                    git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
-                """
-            }
+            sh "helm show values ${helmRepoName} > helm-values.yaml"
+            sh "sed -i 's|tag: .*|tag: ${newImageTag}|' helm-values.yaml"
+            sh "helm upgrade --values helm-values.yaml minikubeapp ${helmRepoName}"
         }
     }
+}
 
-         
-            """
-            }
 
-        }
-       } 
+        
 
     }
 
