@@ -135,6 +135,23 @@ pipeline {
             }
         }
 
+       stage('Update the image tag in helm repo'){
+
+        steps{
+
+            """
+            git branch: 'main',
+            credentialsId: 'github_auth',
+            url: 'https://github.com/icicibank-org-nov/mrdevops_java_app.git'
+            sed -i 's/25/${BUILD_ID}/g' deployment.yaml
+            git add .
+            git commit -m "update the helmrepo"
+            git push origin main 
+         
+            """
+        }
+       } 
+
     }
 
     post {
