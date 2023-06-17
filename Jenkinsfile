@@ -138,7 +138,8 @@ pipeline {
        stage('Update the image tag in helm repo'){
 
         steps{
-
+            script{
+        
             """
             cd minikube-sample
             sed -i 's/25/${BUILD_ID}/g' deployment.yaml
@@ -147,6 +148,8 @@ pipeline {
             git push origin main 
          
             """
+            }
+
         }
        } 
 
